@@ -1,0 +1,59 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<div class="login-container">
+    <div class="logo-container">
+        <!-- Logo -->
+        <img src="{% static 'image/logo.png' %}" alt="Logo" class="logo">
+    </div>
+
+    <h2>Login</h2>
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    <form method="post" id="login-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <button type="submit" class="btn btn-primary btn-login">Login</button>
+            <div class="spinner-border text-primary mt-2 d-none" role="status" id="loading-spinner">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', function (event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+
+        // Show the loading spinner and hide the login button
+        document.getElementById('loading-spinner').classList.remove('d-none');
+        document.querySelector('.btn-login').classList.add('d-none');
+
+        // Submit the form after a short delay (for demonstration purposes)
+        setTimeout(function () {
+            document.getElementById('login-form').submit();
+        }, 1000); // Adjust the delay as needed or remove it if you don't want a delay
+    });
+</script>
+
+{% endblock javascripts %}

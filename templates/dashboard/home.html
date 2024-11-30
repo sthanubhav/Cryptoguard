@@ -1,0 +1,131 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Cryptoguard - Your File Storage Platform
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+{% include 'base/sidebar.html' %}
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+  {% include 'base/navbar.html' %}
+  <div class="container-fluid py-4">
+    {% if error_message %}
+    <p>{{ error_message }}</p>
+    {% else %}
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h6 class="mb-0">Storage Usage</h6>
+          </div>
+          <div class="card-body">
+            <canvas id="storageChart" class="chart" 
+            data-used-percentage="{{ used_percentage }}"
+            data-available-percentage="{{ available_percentage }}"></canvas>
+        
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-header">
+            <h6 class="mb-0">File Overview</h6>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Largest Files:
+                <ul id="largestFilesList" class="list-unstyled">
+                  <li>File1.txt - 10MB</li>
+                  <li>File2.pdf - 8MB</li>
+                  <li>File3.jpg - 5MB</li>
+                </ul>
+              </li>
+              <li class="list-group-item">Recent Files:
+                <ul id="recentFilesList" class="list-unstyled">
+                  <li>Document1.docx - 2024-03-01</li>
+                  <li>Image1.jpg - 2024-02-28</li>
+                  <li>Video1.mp4 - 2024-02-27</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h6 class="mb-0">Recent Activity</h6>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">File uploaded: Document1.pdf</li>
+              <li class="list-group-item">File downloaded: Image1.jpg</li>
+              <li class="list-group-item">File shared: Presentation.pptx</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-header">
+            <h6 class="mb-0">Notifications</h6>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">System maintenance scheduled for tomorrow</li>
+              <li class="list-group-item">New feature update available</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  {% include 'base/footer.html' %}
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+ document.addEventListener("DOMContentLoaded", function () {
+    var storageCtx = document.getElementById('storageChart').getContext('2d');
+    var usedPercentage = parseFloat(document.getElementById('storageChart').getAttribute('data-used-percentage'));
+    var availablePercentage = parseFloat(document.getElementById('storageChart').getAttribute('data-available-percentage'));
+    var storageChart = new Chart(storageCtx, {
+        type: 'doughnut', // Change chart type to doughnut for percentage representation
+        data: {
+            labels: ['Used', 'Available'],
+            datasets: [{
+                label: 'Storage Usage',
+                data: [usedPercentage, availablePercentage],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: 'bottom', // Hide legend
+                },
+            },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.labels[tooltipItem.index];
+                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        return label + ': ' + value.toFixed(2) + '%';
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock javascripts %}

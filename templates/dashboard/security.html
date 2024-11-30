@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Cryptoguard - Security Settings
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+{% include 'base/sidebar.html' %}
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+  {% include 'base/navbar.html' %}
+  <div class="container-fluid py-4">
+
+    <div class="card">
+      <div class="card-header bg-secondary text-white">
+        <h3 class="card-title mb-0">Security Settings</h3>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="mfaCheckbox" name="mfa_enabled" {% if mfa_enabled %}checked{% endif %}>
+            <label class="form-check-label" for="mfaCheckbox">Enable Multi-Factor Authentication (MFA)</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  {% include 'base/footer.html' %}
+</main>
+
+{% endblock %}

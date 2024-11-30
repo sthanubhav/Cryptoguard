@@ -1,0 +1,93 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Cryptoguard - Your File Storage Platform
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+{% include 'base/sidebar.html' %}
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+  {% include 'base/navbar.html' %}
+  <div class="container-fluid py-4">
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-secondary text-white">
+            <h3 class="card-title mb-0">Shared Files</h3>
+          </div>
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">File Name</th>
+                  <th scope="col">Uploader</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for file in uploaded_files %}
+                <tr>
+                  <td>{{ file.file_name }}</td>
+                  <td>{{ file.user.username }}</td>
+                  <td>
+                    <a href="{{ file.file_url }}" class="btn btn-primary view-file" data-hash="{{ file.file_hash }}" data-url="{{ file.file_url }}"
+                      target="_blank">
+                      <i class="fas fa-eye"></i> View
+                    </a>
+                      <!-- Other buttons and modal trigger here -->
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  {% include 'base/footer.html' %}
+</main>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const viewButtons = document.querySelectorAll(".view-file");
+    viewButtons.forEach(function (button) {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        const url = this.getAttribute("data-url");
+        const hash = this.getAttribute("data-hash");
+        verifyIntegrity(url, hash);
+      });
+    });
+
+    function verifyIntegrity(url, hash) {
+      const xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            if (response.valid) {
+              alert("File integrity verified. Starting download...");
+              window.open(url, "_blank");
+            } else {
+              alert("File integrity check failed. The file may have been tampered with.");
+            }
+          } else {
+            alert("Failed to verify file integrity.");
+          }
+        }
+      };
+      xhr.open("GET", `/verify_integrity?url=${encodeURIComponent(url)}&hash=${hash}`);
+      xhr.send();
+    }
+  });
+</script>
+{% endblock javascripts %}
