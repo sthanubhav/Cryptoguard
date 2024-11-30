@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cryptoguard-db',
         'USER': 'nettrust_admin',
-        'PASSWORD': 'admin@123',
+        'PASSWORD': 'PASSWORDHERE',
         'HOST': 'nettrust-db.mysql.database.azure.com',  # or your MySQL server's IP address
         'PORT': '3306',       # default MySQL port
         'TIME_ZONE': 'America/Toronto',
@@ -148,7 +148,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AZURE_ACCOUNT_NAME = 'cryptoguardstorage'
-AZURE_ACCOUNT_KEY = 'EosnOvIAf4eKxKoXf3mwSIdJ5XhLdA4lbuE+ntet40r/d5XldNwWUdag7wMeaKqVMu3Qb+K7sgVh+AStgjXeeg=='
+AZURE_ACCOUNT_KEY = 'KEY_HERE'
 AZURE_CONTAINER = 'cryptofiles'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
